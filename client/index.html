@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+<head>
+<!-- credits for the design: http://designindevelopment.com/css/css3-chess-board/ -->
+<style>
+body{ font-size: 60px; }
+a.black {
+    color:#444;
+    display:block;
+    height:1.33em;
+    position:relative;
+    text-decoration:none;
+    text-shadow:0  0 2px #fff;
+    width:1.33em;
+    font-size:0.75em;
+}
+a.white {
+    color:#fff;
+    display:block;
+    height:1.33em;
+    position:relative;
+    text-decoration:none;
+    text-shadow:0px 0px 2px #000;
+    width:1.33em;
+    font-size:0.75em;
+}
+#board { border:0px solid #333; }
+#board td {
+    background:#fff;
+    background:-moz-linear-gradient(top, #fff, #eee);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#fff), to(#eee));
+    box-shadow:inset 0 0 0 1px #fff;
+    -moz-box-shadow:inset 0 0 0 1px #fff;
+    -webkit-box-shadow:inset 0 0 0 1px #fff;
+    height:1em;
+    text-align:center;
+    vertical-align:middle;
+    width:1em;
+    position: relative;
+}
+#board td.threatened {
+    background:#faa;
+    background:-moz-linear-gradient(top, #faa, #e99);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#faa), to(#e99));
+    box-shadow:inset 0 0 0 1px #fdd;
+    -moz-box-shadow:inset 0 0 0 1px #fdd;
+    -webkit-box-shadow:inset 0 0 0 1px #fdd;
+}
+#board td.defended {
+    background:#afa;
+    background:-moz-linear-gradient(top, #afa, #9e9);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#afa), to(#9e9));
+    box-shadow:inset 0 0 0 1px #dfd;
+    -moz-box-shadow:inset 0 0 0 1px #dfd;
+    -webkit-box-shadow:inset 0 0 0 1px #dfd;
+}
+#board th {
+    text-align:center;
+    vertical-align:middle;
+    background:#aaa;
+    box-shadow:inset 0 0 10px #aaa;
+    -moz-box-shadow:inset 0 0 10px #aaa;
+    -webkit-box-shadow:inset 0 0 10px #aaa;
+    font-size: 0.6em;
+    min-width: 1em;
+    min-height: 1em;
+    line-height: 1em;
+}
+
+#board td.free a { color: #000;}
+#board td.selected a { color: red;}
+
+#board tr:nth-child(odd) td:nth-child(even),
+#board tr:nth-child(even) td:nth-child(odd) {
+    background:#ccc;
+    background:-moz-linear-gradient(top, #ccc, #eee);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#ccc), to(#eee));
+    box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -moz-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -webkit-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+}
+#board tr:nth-child(odd) td.threatened:nth-child(even),
+#board tr:nth-child(even) td.threatened:nth-child(odd) {
+    background:#c88;
+    background:-moz-linear-gradient(top, #c88, #eaa);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#c88), to(#eaa));
+    box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -moz-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -webkit-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+}
+#board tr:nth-child(odd) td.defended:nth-child(even),
+#board tr:nth-child(even) td.defended:nth-child(odd) {
+    background:#8c8;
+    background:-moz-linear-gradient(top, #8c8, #aea);
+    background:-webkit-gradient(linear,0 0, 0 100%, from(#8c8), to(#aea));
+    box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -moz-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    -webkit-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+}
+#board td .note{
+    position: absolute;
+    display: block;
+    font-size: 0.2em;
+    width: 1ex;
+    height: 1em;
+    color: #aaa;
+}
+#board td .moves{
+    top: 0;
+    left: 2px;
+}
+#board td .defended{
+    bottom: 3px;
+    left: 2px;
+}
+#board td .targeted{
+    bottom: 3px;
+    right: 2px;
+}
+</style>
+</head>
+<body>
+<table id="board" cellpadding="0" cellspacing="0">
+    <tr>
+        <th > </th>
+        <th >A</th>
+        <th >B</th>
+        <th >C</th>
+        <th >D</th>
+        <th >E</th>
+        <th >F</th>
+        <th >G</th>
+        <th >H</th>
+        <th > </th>
+    </tr>
+    <tr>
+        <th >8</th>
+        <td id="A8"><a href="#" class="rook black">&#9820;</a></td>
+        <td id="B8"><a href="#" class="night black">&#9822;</a></td>
+        <td id="C8"><a href="#" class="bishop black">&#9821;</a></td>
+        <td id="D8"><a href="#" class="king black">&#9819;</a></td>
+        <td id="E8"><a href="#" class="queen black">&#9818;</a></td>
+        <td id="F8"><a href="#" class="bishop black">&#9821;</a></td>
+        <td id="G8"><a href="#" class="night black">&#9822;</a></td>
+        <td id="H8"><a href="#" class="rook black">&#9820;</a></td>
+        <th >8</th>
+    </tr>
+    <tr>
+        <th >7</th>
+        <td id="A7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="B7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="C7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="D7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="E7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="F7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="G7"><a href="#" class="pawn black">&#9823;</a></td>
+        <td id="H7"><a href="#" class="pawn black">&#9823;</a></td>
+        <th >7</th>
+    </tr>
+    <tr>
+        <th >6</th>
+        <td id="A6"></td>
+        <td id="B6"></td>
+        <td id="C6"></td>
+        <td id="D6"></td>
+        <td id="E6"></td>
+        <td id="F6"></td>
+        <td id="G6"></td>
+        <td id="H6"></td>
+        <th >6</th>
+    </tr>
+    <tr>
+        <th >5</th>
+        <td id="A5"></td>
+        <td id="B5"></td>
+        <td id="C5"></td>
+        <td id="D5"></td>
+        <td id="E5"></td>
+        <td id="F5"></td>
+        <td id="G5"></td>
+        <td id="H5"></td>
+        <th >5</th>
+    </tr>
+    <tr>
+        <th >4</th>
+        <td id="A4"></td>
+        <td id="B4"></td>
+        <td id="C4"></td>
+        <td id="D4"></td>
+        <td id="E4"></td>
+        <td id="F4"></td>
+        <td id="G4"></td>
+        <td id="H4"></td>
+        <th >4</th>
+    </tr>
+    <tr>
+        <th >3</th>
+        <td id="A3"></td>
+        <td id="B3"></td>
+        <td id="C3"></td>
+        <td id="D3"></td>
+        <td id="E3"></td>
+        <td id="F3"></td>
+        <td id="G3"></td>
+        <td id="H3"></td>
+        <th >3</th>
+    </tr>
+    <tr>
+        <th >2</th>
+        <td id="A2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="B2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="C2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="D2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="E2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="F2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="G2"><a href="#" class="pawn white">&#9823;</a></td>
+        <td id="H2"><a href="#" class="pawn white">&#9823;</a></td>
+        <th >2</th>
+    </tr>
+    <tr>
+        <th >1</th>
+        <td id="A1"><a href="#" class="rook white">&#9820;</a></td>
+        <td id="B1"><a href="#" class="night white">&#9822;</a></td>
+        <td id="C1"><a href="#" class="bishop white">&#9821;</a></td>
+        <td id="D1"><a href="#" class="king white">&#9819;</a></td>
+        <td id="E1"><a href="#" class="queen white">&#9818;</a></td>
+        <td id="F1"><a href="#" class="bishop white">&#9821;</a></td>
+        <td id="G1"><a href="#" class="night white">&#9822;</a></td>
+        <td id="H1"><a href="#" class="rook white">&#9820;</a></td>
+        <th >1</th>
+    </tr>
+    <tr>
+        <th > </th>
+        <th >A</th>
+        <th >B</th>
+        <th >C</th>
+        <th >D</th>
+        <th >E</th>
+        <th >F</th>
+        <th >G</th>
+        <th >H</th>
+        <th > </th>
+    </tr>
+</table>
+<div id="result"></div>
+<button id="undo">UNDO</button>
+<script src="./bundle.js"></script>
+
+</body></html>
